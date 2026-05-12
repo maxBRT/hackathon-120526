@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { UsersIcon } from "lucide-react";
 
@@ -180,7 +181,14 @@ export default async function TournamentDetailPage({
               <TableBody>
                 {tournament.teams.map((team) => (
                   <TableRow key={team.id}>
-                    <TableCell className="font-medium">{team.name}</TableCell>
+                    <TableCell className="font-medium">
+                      <Link
+                        href={`/tournaments/${id}/teams/${team.id}`}
+                        className="underline-offset-4 hover:underline"
+                      >
+                        {team.name}
+                      </Link>
+                    </TableCell>
                     <TableCell>{team._count.members}</TableCell>
                     <TableCell>
                       {team._count.members} / {team.maxCapacity}

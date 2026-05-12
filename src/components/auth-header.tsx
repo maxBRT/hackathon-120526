@@ -1,6 +1,7 @@
 'use client'
 
 import { Show, SignInButton, SignUpButton, UserButton } from '@clerk/nextjs'
+import Link from 'next/link'
 
 export function AuthHeader() {
   return (
@@ -17,6 +18,12 @@ export function AuthHeader() {
         </SignUpButton>
       </Show>
       <Show when="signed-in">
+        <Link
+          href="/my-requests"
+          className="text-sm font-medium text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+        >
+          My requests
+        </Link>
         <UserButton />
       </Show>
     </header>
