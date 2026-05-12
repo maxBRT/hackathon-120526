@@ -1,8 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
@@ -10,4 +5,119 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+}
+
+enum Role {
+  PLAYER
+  ORGANIZER
+  ADMIN
+}
+
+enum Level {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+enum RequestStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+enum PaymentStatus {
+  NOT_REQUIRED
+  PENDING
+  PAID
+}
+
+model User {
+  id        String   @unique @id
+  email     String   @unique
+  fullName  String
+  role      Role     @default(PLAYER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  playerProfile PlayerProfile?
+  tournaments   Tournament[]   @relation("OrganizerTournaments")
+  teams         Team[]         @relation("TeamMembers")
+  joinRequests  JoinRequest[]
+}
+
+model PlayerProfile {
+  id            String  @id @default(cuid())
+  userId        String  @unique
+  city          String
+  favoriteSport String
+  level         Level   @default(BEGINNER)
+  position      String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Tournament {
+  id          String   @id @default(cuid())
+  name        String
+  sport       String
+  city        String
+  startDate   DateTime
+  entryFee    Int      @default(0)
+  currency    String   @default("CAD")
+  organizerId String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  organizer User   @relation("OrganizerTournaments", fields: [organizerId], references: [id])
+  teams     Team[]
+
+  @@index([sport, city])
+}
+
+model Team {
+  id           String   @id @default(cuid())
+  name         String
+  tournamentId String
+  maxCapacity  Int      @default(15)
+  createdAt    DateTime @default(now())
+
+  tournament     Tournament    @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  members        User[]        @relation("TeamMembers")
+  joinRequests   JoinRequest[]
+  matchesAsTeamA Match[]       @relation("TeamA")
+  matchesAsTeamB Match[]       @relation("TeamB")
+}
+
+model JoinRequest {
+  id              String        @id @default(cuid())
+  playerId        String
+  teamId          String
+  status          RequestStatus @default(PENDING)
+  message         String?
+  paymentStatus   PaymentStatus @default(NOT_REQUIRED)
+  stripeSessionId String?
+  paidAt          DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  player User @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  team   Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  @@unique([playerId, teamId])
+  @@index([status])
+  @@index([paymentStatus])
+}
+
+model Match {
+  id        String   @id @default(cuid())
+  teamAId   String
+  teamBId   String
+  date      DateTime
+  location  String
+  scoreA    Int?
+  scoreB    Int?
+  createdAt DateTime @default(now())
+
+  teamA Team @relation("TeamA", fields: [teamAId], references: [id])
+  teamB Team @relation("TeamB", fields: [teamBId], references: [id])
 }
