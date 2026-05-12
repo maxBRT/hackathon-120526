@@ -34,7 +34,8 @@ enum PaymentStatus {
 model User {
   id        String   @unique @id
   email     String   @unique
-  fullName  String
+  firstName  String
+  lastName  String
   role      Role     @default(PLAYER)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
