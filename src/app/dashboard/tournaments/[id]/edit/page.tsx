@@ -1,8 +1,11 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
+import { UsersIcon } from "lucide-react";
 
 import { updateTournament } from "@/app/dashboard/tournaments/actions";
 import { DeleteTournamentButton } from "@/components/tournaments/delete-tournament-button";
 import { TournamentForm } from "@/components/tournaments/tournament-form";
+import { buttonVariants } from "@/components/ui/button";
 import { requireOrganizer } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 
@@ -55,10 +58,19 @@ export default async function EditTournamentPage({
             Edit tournament
           </h1>
         </div>
-        <DeleteTournamentButton
-          tournamentId={tournament.id}
-          tournamentName={tournament.name}
-        />
+        <div className="flex flex-wrap gap-2">
+          <Link
+            href={`/dashboard/tournaments/${tournament.id}/teams`}
+            className={buttonVariants({ variant: "outline" })}
+          >
+            <UsersIcon />
+            Manage teams
+          </Link>
+          <DeleteTournamentButton
+            tournamentId={tournament.id}
+            tournamentName={tournament.name}
+          />
+        </div>
       </div>
 
       <TournamentForm

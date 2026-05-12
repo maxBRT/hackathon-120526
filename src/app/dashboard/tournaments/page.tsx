@@ -1,5 +1,10 @@
 import Link from "next/link";
-import { CalendarPlusIcon, ExternalLinkIcon, PlusIcon } from "lucide-react";
+import {
+  CalendarPlusIcon,
+  ExternalLinkIcon,
+  PlusIcon,
+  UsersIcon,
+} from "lucide-react";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
@@ -174,6 +179,13 @@ export default async function DashboardTournamentsPage() {
                         >
                           <ExternalLinkIcon />
                           View
+                        </Link>
+                        <Link
+                          href={`/dashboard/tournaments/${tournament.id}/teams`}
+                          className={buttonVariants({ variant: "outline" })}
+                        >
+                          <UsersIcon />
+                          Teams
                         </Link>
                         <Link
                           href={`/dashboard/tournaments/${tournament.id}/edit`}
