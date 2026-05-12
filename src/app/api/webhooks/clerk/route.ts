@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
     const evt = await verifyWebhook(req)
 
     if (evt.type === 'user.created') {
-      const { id, email_addresses, first_name, last_name, image_url } = evt.data
+      const { id, email_addresses, first_name, last_name } = evt.data
       await prisma.user.upsert({
         where: { id: id },
         update: {}, // No update on create - handles duplicate webhooks
@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
     }
 
     if (evt.type === 'user.updated') {
-      const { id, email_addresses, first_name, last_name, image_url } = evt.data
+      const { id, email_addresses, first_name, last_name } = evt.data
       await prisma.user.upsert({
         where: { id: id },
         update: {
