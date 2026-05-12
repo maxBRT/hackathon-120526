@@ -81,7 +81,7 @@ export function TeamForm({
         </CardDescription>
       </CardHeader>
       <form action={formAction}>
-        <CardContent className="space-y-5">
+        <CardContent className="space-y-5 pb-6">
           {state.formError ? (
             <Alert variant="destructive">
               <AlertTitle>Unable to save team</AlertTitle>
