@@ -19,6 +19,7 @@ function revalidateOrganizerJoinRequestPaths(tournamentId: string, teamId: strin
   revalidatePath(`/tournaments/${tournamentId}`);
   revalidatePath(`/tournaments/${tournamentId}/teams/${teamId}`);
   revalidatePath("/my-requests");
+  revalidatePath("/dashboard");
   revalidatePath("/dashboard/requests");
   revalidatePath("/dashboard/tournaments");
   revalidatePath(`/dashboard/tournaments/${tournamentId}/teams`);

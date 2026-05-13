@@ -47,7 +47,7 @@ export function PrimaryNav({ showDashboard, showMyRequests }: PrimaryNavProps) {
         </Link>
       ) : null}
       {showDashboard ? (
-        <Link href="/dashboard/tournaments" className={navClass(dashboardActive)}>
+        <Link href="/dashboard" className={navClass(dashboardActive)}>
           Dashboard
         </Link>
       ) : null}

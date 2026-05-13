@@ -46,6 +46,7 @@ function revalidateTeamPaths(tournamentId: string, teamId?: string) {
   revalidatePath("/");
   revalidatePath("/tournaments");
   revalidatePath(`/tournaments/${tournamentId}`);
+  revalidatePath("/dashboard");
   revalidatePath("/dashboard/tournaments");
   revalidatePath(`/dashboard/tournaments/${tournamentId}/teams`);
 
