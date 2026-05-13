@@ -11,6 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { TournamentSummaryCard } from "@/components/tournaments/tournament-summary-card";
+import { getCurrentUser } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
@@ -26,6 +27,10 @@ function registeredPlayersFor(
 }
 
 export default async function TournamentsPage() {
+  const user = await getCurrentUser();
+  const canCreateTournament =
+    user != null && (user.role === "ORGANIZER" || user.role === "ADMIN");
+
   const tournaments = await prisma.tournament.findMany({
     orderBy: {
       startDate: "asc",
@@ -76,13 +81,15 @@ export default async function TournamentsPage() {
             and player counts.
           </p>
         </div>
-        <Link
-          href="/dashboard/tournaments/new"
-          className={buttonVariants({ variant: "default" })}
-        >
-          <PlusIcon />
-          Create tournament
-        </Link>
+        {canCreateTournament ? (
+          <Link
+            href="/dashboard/tournaments/new"
+            className={buttonVariants({ variant: "default" })}
+          >
+            <PlusIcon />
+            Create tournament
+          </Link>
+        ) : null}
       </div>
 
       {tournaments.length === 0 ? (
@@ -97,9 +104,26 @@ export default async function TournamentsPage() {
           <CardContent>
             <Alert>
               <CalendarDaysIcon />
-              <AlertTitle>Start from the dashboard</AlertTitle>
+              <AlertTitle>
+                {canCreateTournament
+                  ? "Create the first tournament"
+                  : "Nothing listed yet"}
+              </AlertTitle>
               <AlertDescription>
-                Create the first tournament from the unprotected dashboard flow.
+                {canCreateTournament ? (
+                  <>
+                    Use{" "}
+                    <Link
+                      href="/dashboard/tournaments/new"
+                      className="font-medium text-foreground underline-offset-4 hover:underline"
+                    >
+                      the tournament form
+                    </Link>{" "}
+                    in your organizer dashboard to publish one here.
+                  </>
+                ) : (
+                  "New public listings will show up when an organizer adds a tournament."
+                )}
               </AlertDescription>
             </Alert>
           </CardContent>

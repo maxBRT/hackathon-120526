@@ -57,6 +57,7 @@ function validationErrorState(values: Record<string, string>, fieldErrors: Tourn
 function revalidateTournamentPaths(tournamentId?: string) {
   revalidatePath("/");
   revalidatePath("/tournaments");
+  revalidatePath("/dashboard");
   revalidatePath("/dashboard/tournaments");
 
   if (tournamentId) {
