@@ -51,6 +51,7 @@ type TournamentFormProps = {
     lastName: string;
     email: string;
   };
+  sports?: { id: string; name: string }[];
 };
 
 const initialState: TournamentActionState = {};
@@ -78,6 +79,7 @@ export function TournamentForm({
   initialValues = {},
   variant = "create",
   organizerSummary,
+  sports = [],
 }: TournamentFormProps) {
   const [state, formAction, isPending] = useActionState(action, initialState);
 
@@ -133,13 +135,32 @@ export function TournamentForm({
 
             <div className="space-y-2">
               <Label htmlFor="sport">Sport</Label>
-              <Input
-                id="sport"
-                name="sport"
-                defaultValue={valueFor(values, initialValues, "sport")}
-                aria-invalid={Boolean(fieldError(state, "sport")) || undefined}
-                placeholder="Basketball"
-              />
+              {sports && sports.length > 0 ? (
+                <>
+                  <Select name="sport" defaultValue={valueFor(values, initialValues, "sport")}>
+                    <SelectTrigger id="sport" className="w-full" aria-invalid={Boolean(fieldError(state, "sport")) || undefined}>
+                      <SelectValue placeholder="Select sport" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {sports.map((s) => (
+                        <SelectItem key={s.id} value={s.name}>
+                          {s.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </>
+              ) : (
+                <>
+                  <Input
+                    id="sport"
+                    name="sport"
+                    defaultValue={valueFor(values, initialValues, "sport")}
+                    aria-invalid={Boolean(fieldError(state, "sport")) || undefined}
+                    placeholder="Basketball"
+                  />
+                </>
+              )}
               {fieldError(state, "sport") ? (
                 <p className="text-sm text-destructive">
                   {fieldError(state, "sport")}

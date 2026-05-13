@@ -45,6 +45,8 @@ export default async function EditTournamentPage({
     notFound();
   }
 
+  const sports = await (prisma as any).sport.findMany({ orderBy: { name: 'asc' } });
+
   const updateTournamentWithId = updateTournament.bind(null, tournament.id);
 
   return (
@@ -91,6 +93,7 @@ export default async function EditTournamentPage({
           entryFee: String(tournament.entryFee),
           currency: tournament.currency,
         }}
+        sports={sports.map((s: any) => ({ id: s.id, name: s.name }))}
       />
     </main>
   );
