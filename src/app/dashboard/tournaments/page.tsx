@@ -181,6 +181,13 @@ export default async function DashboardTournamentsPage() {
                           View
                         </Link>
                         <Link
+                          href={`/dashboard/tournaments/${tournament.id}/matches`}
+                          className={buttonVariants({ variant: "outline" })}
+                        >
+                          <CalendarPlusIcon />
+                          Matches
+                        </Link>
+                        <Link
                           href={`/dashboard/tournaments/${tournament.id}/teams`}
                           className={buttonVariants({ variant: "outline" })}
                         >

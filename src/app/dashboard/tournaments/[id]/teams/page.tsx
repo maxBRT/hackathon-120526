@@ -75,6 +75,12 @@ export default async function TournamentTeamsPage({ params }: TeamsPageProps) {
         </div>
         <div className="flex flex-wrap gap-2">
           <Link
+            href={`/dashboard/tournaments/${id}/matches`}
+            className={buttonVariants({ variant: "outline" })}
+          >
+            Matches
+          </Link>
+          <Link
             href={`/dashboard/tournaments/${id}/edit`}
             className={buttonVariants({ variant: "outline" })}
           >
