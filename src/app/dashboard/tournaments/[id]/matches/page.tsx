@@ -79,7 +79,7 @@ export default async function TournamentMatchesPage({ params }: MatchesPageProps
   }
 
   return (
-    <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-4 py-10 sm:px-6 lg:px-8">
+    <main className="flex flex-col gap-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-sm font-medium text-muted-foreground">
@@ -93,21 +93,13 @@ export default async function TournamentMatchesPage({ params }: MatchesPageProps
             {tournament.sport} in {tournament.city}.
           </p>
         </div>
-        <div className="flex flex-wrap gap-2">
-          <Link
-            href={`/dashboard/tournaments/${id}/teams`}
-            className={buttonVariants({ variant: "outline" })}
-          >
-            Teams
-          </Link>
-          <Link
-            href={`/dashboard/tournaments/${id}/matches/new`}
-            className={buttonVariants({ variant: "default" })}
-          >
-            <PlusIcon />
-            Schedule match
-          </Link>
-        </div>
+        <Link
+          href={`/dashboard/tournaments/${id}/matches/new`}
+          className={buttonVariants({ variant: "default" })}
+        >
+          <PlusIcon />
+          Schedule match
+        </Link>
       </div>
 
       <Card>

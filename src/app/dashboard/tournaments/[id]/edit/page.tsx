@@ -1,11 +1,8 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { CalendarIcon, UsersIcon } from "lucide-react";
 
 import { updateTournament } from "@/app/dashboard/tournaments/actions";
 import { DeleteTournamentButton } from "@/components/tournaments/delete-tournament-button";
 import { TournamentForm } from "@/components/tournaments/tournament-form";
-import { buttonVariants } from "@/components/ui/button";
 import { requireOrganizer } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 
@@ -48,7 +45,7 @@ export default async function EditTournamentPage({
   const updateTournamentWithId = updateTournament.bind(null, tournament.id);
 
   return (
-    <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-4 py-10 sm:px-6 lg:px-8">
+    <main className="flex flex-col gap-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-sm font-medium text-muted-foreground">
@@ -58,26 +55,10 @@ export default async function EditTournamentPage({
             Edit tournament
           </h1>
         </div>
-        <div className="flex flex-wrap gap-2">
-          <Link
-            href={`/dashboard/tournaments/${tournament.id}/matches`}
-            className={buttonVariants({ variant: "outline" })}
-          >
-            <CalendarIcon className="size-4" />
-            Matches
-          </Link>
-          <Link
-            href={`/dashboard/tournaments/${tournament.id}/teams`}
-            className={buttonVariants({ variant: "outline" })}
-          >
-            <UsersIcon />
-            Manage teams
-          </Link>
-          <DeleteTournamentButton
-            tournamentId={tournament.id}
-            tournamentName={tournament.name}
-          />
-        </div>
+        <DeleteTournamentButton
+          tournamentId={tournament.id}
+          tournamentName={tournament.name}
+        />
       </div>
 
       <TournamentForm

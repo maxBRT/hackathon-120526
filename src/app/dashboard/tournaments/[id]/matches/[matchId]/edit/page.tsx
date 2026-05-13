@@ -57,7 +57,7 @@ export default async function EditMatchPage({ params }: EditMatchPageProps) {
   const action = updateMatch.bind(null, id, matchId);
 
   return (
-    <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-4 py-10 sm:px-6 lg:px-8">
+    <main className="flex flex-col gap-8">
       <div>
         <p className="text-sm font-medium text-muted-foreground">
           Organizer dashboard
