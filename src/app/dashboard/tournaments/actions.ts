@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 
 import { requireOrganizer } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { deleteTournamentById } from "@/server/actions/tournaments";
 import {
   tournamentCreateSchema,
   tournamentUpdateSchema,
@@ -183,11 +184,7 @@ export async function deleteTournament(
   }
 
   try {
-    await prisma.tournament.delete({
-      where: {
-        id: tournamentId,
-      },
-    });
+    await deleteTournamentById(tournamentId);
   } catch {
     return {
       formError: "Unable to delete this tournament.",
