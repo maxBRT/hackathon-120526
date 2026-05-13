@@ -1,5 +1,6 @@
 import { createTournament } from "@/app/dashboard/tournaments/actions";
 import { TournamentForm } from "@/components/tournaments/tournament-form";
+import prisma from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
@@ -8,6 +9,7 @@ function toDateInputValue(date: Date) {
 }
 
 export default async function NewTournamentPage() {
+  const sports = await (prisma as any).sport.findMany({ orderBy: { name: 'asc' } });
   return (
     <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-4 py-10 sm:px-6 lg:px-8">
       <div>
@@ -29,6 +31,7 @@ export default async function NewTournamentPage() {
           currency: "CAD",
           startDate: toDateInputValue(new Date()),
         }}
+        sports={sports.map((s: any) => ({ id: s.id, name: s.name }))}
       />
     </main>
   );

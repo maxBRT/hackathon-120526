@@ -50,11 +50,19 @@ model PlayerProfile {
   id            String  @id @default(cuid())
   userId        String  @unique
   city          String
-  favoriteSport String
+  favoriteSportId String?
   level         Level   @default(BEGINNER)
   position      String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  favoriteSport Sport? @relation(fields: [favoriteSportId], references: [id])
+}
+
+model Sport {
+  id   String @id @default(cuid())
+  name String @unique
+
+  playerProfiles PlayerProfile[]
 }
 
 model Tournament {
