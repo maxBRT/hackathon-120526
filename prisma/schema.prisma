@@ -121,4 +121,6 @@ model Match {
 
   teamA Team @relation("TeamA", fields: [teamAId], references: [id])
   teamB Team @relation("TeamB", fields: [teamBId], references: [id])
+
+  @@index([date])
 }

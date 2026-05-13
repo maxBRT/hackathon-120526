@@ -20,12 +20,11 @@ export default function Home() {
           Browse and manage tournaments
         </h1>
         <p className="mt-4 text-muted-foreground">
-          Browse tournaments without signing in. Organizer tools live in the
-          dashboard and require a signed-in organizer or admin account.
+          Find tournaments, check the schedule, and follow the action in one place.
         </p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-4 md:grid-cols-3">
         <Card>
           <CardHeader>
             <CardTitle>Public tournaments</CardTitle>
@@ -39,6 +38,21 @@ export default function Home() {
               className={buttonVariants({ variant: "default" })}
             >
               View tournaments
+            </Link>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Upcoming matches</CardTitle>
+            <CardDescription>See scheduled games across all tournaments.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Link
+              href="/matches"
+              className={buttonVariants({ variant: "outline" })}
+            >
+              View schedule
             </Link>
           </CardContent>
         </Card>

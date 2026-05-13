@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { UsersIcon } from "lucide-react";
+import { CalendarIcon, UsersIcon } from "lucide-react";
 
 import { updateTournament } from "@/app/dashboard/tournaments/actions";
 import { DeleteTournamentButton } from "@/components/tournaments/delete-tournament-button";
@@ -59,6 +59,13 @@ export default async function EditTournamentPage({
           </h1>
         </div>
         <div className="flex flex-wrap gap-2">
+          <Link
+            href={`/dashboard/tournaments/${tournament.id}/matches`}
+            className={buttonVariants({ variant: "outline" })}
+          >
+            <CalendarIcon className="size-4" />
+            Matches
+          </Link>
           <Link
             href={`/dashboard/tournaments/${tournament.id}/teams`}
             className={buttonVariants({ variant: "outline" })}

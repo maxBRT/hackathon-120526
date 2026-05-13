@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { UsersIcon } from "lucide-react";
+import { CalendarIcon, UsersIcon } from "lucide-react";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
@@ -34,6 +34,14 @@ const dateFormatter = new Intl.DateTimeFormat("en", {
   month: "long",
   day: "numeric",
   year: "numeric",
+});
+
+const dateTimeFormatter = new Intl.DateTimeFormat("en", {
+  month: "short",
+  day: "numeric",
+  year: "numeric",
+  hour: "numeric",
+  minute: "2-digit",
 });
 
 function formatEntryFee(entryFee: number, currency: string) {
@@ -75,6 +83,22 @@ export default async function TournamentDetailPage({
     (total, team) => total + team._count.members,
     0
   );
+
+  const upcomingMatches = await prisma.match.findMany({
+    where: {
+      AND: [
+        { teamA: { tournamentId: id } },
+        { teamB: { tournamentId: id } },
+        { date: { gte: new Date() } },
+      ],
+    },
+    orderBy: { date: "asc" },
+    take: 25,
+    include: {
+      teamA: { select: { name: true } },
+      teamB: { select: { name: true } },
+    },
+  });
 
   return (
     <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-4 py-10 sm:px-6 lg:px-8">
@@ -150,6 +174,54 @@ export default async function TournamentDetailPage({
               <dd className="font-medium">{tournament.organizer.email}</dd>
             </div>
           </dl>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <CalendarIcon className="size-5" />
+            Upcoming matches
+          </CardTitle>
+          <CardDescription>
+            Scheduled games for this tournament.{" "}
+            <Link href="/matches" className="underline-offset-4 hover:underline">
+              View all upcoming matches
+            </Link>
+            .
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {upcomingMatches.length === 0 ? (
+            <p className="text-muted-foreground text-sm">
+              No matches scheduled yet for this tournament.
+            </p>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>When</TableHead>
+                  <TableHead>Teams</TableHead>
+                  <TableHead>Location</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {upcomingMatches.map((match) => (
+                  <TableRow key={match.id}>
+                    <TableCell className="whitespace-nowrap">
+                      {dateTimeFormatter.format(match.date)}
+                    </TableCell>
+                    <TableCell>
+                      <span className="font-medium">{match.teamA.name}</span>
+                      {" vs "}
+                      <span className="font-medium">{match.teamB.name}</span>
+                    </TableCell>
+                    <TableCell>{match.location}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
         </CardContent>
       </Card>
 
