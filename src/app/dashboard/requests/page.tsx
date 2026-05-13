@@ -363,7 +363,7 @@ export default async function DashboardJoinRequestsPage({ searchParams }: JoinRe
                             {profile ? (
                               <ul className="text-muted-foreground list-inside list-disc space-y-0.5">
                                 <li>{profile.city}</li>
-                                <li>{profile.favoriteSport}</li>
+                                <li>{profile.favoriteSportId}</li>
                                 <li>{levelLabel(profile.level)}</li>
                                 {profile.position ? <li>{profile.position}</li> : null}
                               </ul>
