@@ -61,7 +61,7 @@ export default async function EditTeamPage({ params }: EditTeamPageProps) {
   const updateTeamBound = updateTeam.bind(null, tournamentId, team.id);
 
   return (
-    <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-4 py-10 sm:px-6 lg:px-8">
+    <main className="flex flex-col gap-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-sm font-medium text-muted-foreground">

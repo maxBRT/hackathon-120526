@@ -24,7 +24,7 @@ export default function Home() {
         </p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-2">
         <Card>
           <CardHeader>
             <CardTitle>Public tournaments</CardTitle>
@@ -53,23 +53,6 @@ export default function Home() {
               className={buttonVariants({ variant: "outline" })}
             >
               View schedule
-            </Link>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Organizer dashboard</CardTitle>
-            <CardDescription>
-              Sign in as an organizer or admin to create and edit tournaments.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Link
-              href="/dashboard/tournaments"
-              className={buttonVariants({ variant: "outline" })}
-            >
-              Manage tournaments
             </Link>
           </CardContent>
         </Card>
