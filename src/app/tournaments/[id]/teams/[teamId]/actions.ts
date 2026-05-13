@@ -5,6 +5,9 @@ import { redirect } from "next/navigation";
 
 import { requireSignedInUser } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { getPublicAppUrl } from "@/lib/public-app-url";
+import { getStripe } from "@/lib/stripe";
+import { tournamentEntryFeeToStripeUnitAmount } from "@/lib/stripe-pricing";
 import { joinRequestFormSchema } from "@/lib/validations/join-request";
 
 export type JoinRequestActionState = {
@@ -152,28 +155,64 @@ export async function createJoinRequest(
   }
 
   if (!isFree) {
-    console.log(
-      JSON.stringify({
-        phase: "join_request_paid_stub",
-        joinRequestId,
-        teamId,
-        tournamentId: team.tournament.id,
-        entryFee: team.tournament.entryFee,
-        currency: team.tournament.currency,
-        playerId: user.id,
-      })
-    );
+    const baseUrl = getPublicAppUrl();
+    const tournament = team.tournament;
+    let checkoutSessionUrl: string;
+
+    try {
+      const stripe = getStripe();
+      const unitAmount = tournamentEntryFeeToStripeUnitAmount(
+        tournament.entryFee,
+        tournament.currency
+      );
+      const session = await stripe.checkout.sessions.create({
+        mode: "payment",
+        metadata: { joinRequestId },
+        success_url: `${baseUrl}/payment/success`,
+        cancel_url: `${baseUrl}/payment/cancel`,
+        line_items: [
+          {
+            price_data: {
+              currency: tournament.currency.toLowerCase(),
+              unit_amount: unitAmount,
+              product_data: {
+                name: `${tournament.name} · team entry`,
+              },
+            },
+            quantity: 1,
+          },
+        ],
+      });
+
+      if (!session.url) {
+        return {
+          ...values,
+          formError: "Checkout could not be started. Please try again.",
+        };
+      }
+
+      checkoutSessionUrl = session.url;
+
+      await prisma.joinRequest.update({
+        where: { id: joinRequestId },
+        data: { stripeSessionId: session.id },
+      });
+    } catch {
+      return {
+        ...values,
+        formError: "Checkout could not be started. Please try again.",
+      };
+    }
+
+    revalidateJoinPaths(tournamentId, teamId);
+    redirect(checkoutSessionUrl);
   }
 
   revalidateJoinPaths(tournamentId, teamId);
 
-  const successMessage = isFree
-    ? "Your join request was sent."
-    : "Your join request was recorded. Payment is still pending.";
-
   return {
     success: true,
-    successMessage,
+    successMessage: "Your join request was sent.",
     values: { message: "" },
   };
 }
