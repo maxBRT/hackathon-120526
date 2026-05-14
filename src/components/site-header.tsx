@@ -10,6 +10,7 @@ export async function SiteHeader() {
   const showDashboard =
     user != null && (user.role === "ORGANIZER" || user.role === "ADMIN");
   const showMyRequests = user != null;
+  const showAdmin = user?.role === "ADMIN";
 
   return (
     <header className="border-border border-b">
@@ -24,6 +25,7 @@ export async function SiteHeader() {
           <PrimaryNav
             showDashboard={showDashboard}
             showMyRequests={showMyRequests}
+            showAdmin={showAdmin}
           />
         </div>
         <SiteHeaderAuth />

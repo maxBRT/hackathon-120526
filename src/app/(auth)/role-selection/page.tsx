@@ -31,9 +31,15 @@ export default function OnboardingPage() {
   async function handleSubmit() {
     if (!role || !session) return
     setLoading(true)
-    await saveRole(role)
-    await session.reload()
-    router.push('/')
+    try {
+      await saveRole(role)
+      await session.reload()
+      router.push('/')
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
