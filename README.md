@@ -1,5 +1,7 @@
 # Application tournoi hackathon
 
+[Rapport de documentation complet](./Hackathon_MaximeBourret_AlexandrineDube.pdf)
+
 Application web pour découvrir des tournois, gérer des équipes et des matchs, et traiter les demandes d’adhésion payantes. Les organisateurs créent des tournois et des effectifs ; les joueurs complètent un profil, demandent à rejoindre une équipe et paient les frais d’inscription via Stripe lorsque c’est nécessaire. Les utilisateurs et les rôles sont synchronisés depuis Clerk vers PostgreSQL (Neon) avec Prisma.
 
 ## Technologies utilisées
