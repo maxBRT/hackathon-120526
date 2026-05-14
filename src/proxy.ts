@@ -13,7 +13,10 @@ const isPublicRoute = createRouteMatcher([
   "/api/webhooks(.*)",
 ]);
 
-const isRoleSelection = createRouteMatcher(["/role-selection"])
+// Match `/role-selection`, `/role-selection/`, etc. Exact `"/role-selection"` breaks
+// Server Actions when the POST URL has a trailing slash: middleware would redirect
+// with a non-RSC response and the client shows "An unexpected response was received".
+const isRoleSelection = createRouteMatcher(["/role-selection(.*)"]);
 
 export default clerkMiddleware(async (auth, req) => {
     const { userId, sessionClaims } = await auth();
@@ -27,7 +30,12 @@ export default clerkMiddleware(async (auth, req) => {
             return NextResponse.redirect(new URL('/role-selection', req.url));
         }
 
-        if (hasRole && isRoleSelection(req)) {
+        // GET-only: redirecting POST (e.g. saveRole after session.reload()) breaks Server Actions.
+        if (
+            hasRole &&
+            isRoleSelection(req) &&
+            (req.method === "GET" || req.method === "HEAD")
+        ) {
             return NextResponse.redirect(new URL('/', req.url));
         }
     }
