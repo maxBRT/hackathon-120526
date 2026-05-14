@@ -8,6 +8,8 @@ const isPublicRoute = createRouteMatcher([
   "/role-selection(.*)",
   "/tournaments(.*)",
   "/matches(.*)",
+  "/payment/success",
+  "/payment/cancel",
   "/api/webhooks(.*)",
 ]);
 
